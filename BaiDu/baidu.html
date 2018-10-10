@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>百度一下，你就知道</title>
+    <style type='text/css'>
+        #result {width:311px; height:auto; border:1px #CCCCCC solid; display:none;}
+    </style>
+    <script src='ajax.js'></script>
+    <script>
+        //定义页面载入事件
+        window.onload = function() {
+            //获取文本框并绑定事件
+            $('keyword').onkeyup = function() {
+                //获取文本框的值
+                var keyword = this.value;
+                if(keyword == '') {
+                    //隐藏div#result层
+                    $('result').innerHTML = '';
+                    $('result').style.display = 'none';
+                    //强制停止代码的执行
+                    return;
+                }
+                //发送Ajax请求
+                $.post('baidu.php','keyword='+keyword,function(msg){
+                    //判断msg是否为空var msg = [{},{},{}];
+                    if(msg.length > 0) {
+                        //清空div#result层
+                        $('result').innerHTML = '';
+                        for(var i=0;i<msg.length;i++) {
+                            //创建一个div对象
+                            var div = document.createElement('div');
+                            //设置元素内容
+                            div.innerHTML = msg[i].a_name;
+                            //为div对象绑定悬浮事件
+                            div.onmouseover = function() {
+                                this.style.backgroundColor = '#CCCCCC';
+                            }
+                            //为div对象绑定离开事件
+                            div.onmouseout = function() {
+                                this.style.backgroundColor = '#FFFFFF';
+                            }
+                            //为div对象绑定点击事件
+                            div.onclick = function() {
+                                $('keyword').value = this.innerHTML;
+                                //隐藏div#result
+                                $('result').style.display = 'none';
+                            }
+                            //追加div到div#result层中
+                            $('result').appendChild(div);
+                            //显示div#result层
+                            $('result').style.display = 'block';
+                        }
+                    }
+                },'json');
+            }
+        }
+    </script>
+</head>
+<body>
+<img width='273' height='88' src='logo.png' />
+<br />
+<input type="text" id='keyword' size='40' />
+<br />
+<div id='result'></div>
+</body>
+</html>
