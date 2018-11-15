@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function callback(msg) {
+            alert(msg)
+        }
+        window.onload = function () {
+            document.getElementById('bt').onclick = function () {
+                var sc = document.createElement('script');
+                sc.src = "http://www.space.com/jsonp/kuayu.php?fn=callback";
+                document.getElementsByTagName('head')[0].appendChild(sc);
+            }
+        }
+    </script>
+</head>
+<body>
+<input type="button" id="bt" value="跨域请求">
+</body>
+</html>
